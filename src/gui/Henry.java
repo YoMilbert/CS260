@@ -3,6 +3,7 @@ package gui;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -46,7 +47,12 @@ public class Henry {
 		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
-				conn.close();
+				try {
+					conn.close();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 	}

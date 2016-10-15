@@ -23,7 +23,7 @@ public class HenryDAO {
 	public static void main(String[] args) {
 		HenryDAO test = new HenryDAO(conn);
 		test.createConnection();
-		System.out.println(test.GetAuthorNames());		
+		System.out.println(test.getAuthorNames());		
 	}
 	
 	public HenryDAO(Connection conn){
@@ -41,7 +41,7 @@ public class HenryDAO {
 		return conn;
 	}
 	
-	public Vector<String> GetAuthorNames(){
+	public Vector<String> getAuthorNames(){
 		Vector<String> names = new Vector<String>();
 		
 		try{
@@ -70,6 +70,17 @@ public class HenryDAO {
 		
 	}
 	
+	public Vector<String> getBooksForAuthor(){
+		return null;
+	}
+	
+	public String getPriceForBook(){
+		return null;
+	}
+	
+	public Vector<String> getBranchDataForBook(){
+		return null;
+	}
 	
 }
 
