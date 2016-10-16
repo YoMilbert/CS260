@@ -1,11 +1,10 @@
 package jpanel;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -18,17 +17,19 @@ import dao.HenryDAO;
 
 public class SearchByAuthorPanel extends JPanel{
 	
+	private static final long serialVersionUID = -8960689784128525788L;
+
 	HenryDAO henryDAO;
 	
-	JComboBox authors;
-	JComboBox books;
+	JComboBox<String> authors;
+	JComboBox<String> books;
 	JTextArea price;
-	JList branchData;
+	JList<String> branchData;
 	
 	public SearchByAuthorPanel(Connection conn){
 		henryDAO = new HenryDAO(conn);
 		
-		this.setLayout(new BorderLayout());
+		this.setLayout(new FlowLayout());
 		this.setPreferredSize(new Dimension(500, 500));
 		//Add authors
 		Vector<String> authorNames = henryDAO.getAuthorNames();
@@ -36,7 +37,7 @@ public class SearchByAuthorPanel extends JPanel{
 		authors.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					JComboBox authors = (JComboBox) e.getSource();
+					JComboBox<String> authors = (JComboBox<String>) e.getSource();
 					String author = (String) authors.getSelectedItem();
 					refillBooks(author);
 				}
@@ -45,7 +46,7 @@ public class SearchByAuthorPanel extends JPanel{
 		books.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					JComboBox books = (JComboBox) e.getSource();
+					JComboBox<String> books = (JComboBox<String>) e.getSource();
 					String book = (String) books.getSelectedItem();
 					refillPrice(book);
 					refillBranchData(book);

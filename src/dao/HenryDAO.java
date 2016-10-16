@@ -82,5 +82,9 @@ public class HenryDAO {
 		return null;
 	}
 	
+	public Vector<String> getCategories(){
+		return null;
+	}
+	
 }
 
