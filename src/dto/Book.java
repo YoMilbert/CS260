@@ -17,15 +17,15 @@ public class Book {
 		this.code = code;
 	}
 	
-	public String getLastName(){
-		return lastName;
+	public String getname(){
+		return name;
 	}
 
-	public void setLastName(String lastName){
-		this.lastName = lastName;
+	public void setname(String name){
+		this.name = name;
 	}
 	
 	public String toString(){
-		return firstName + " " + lastName;
+		return name;
 	}
 }
