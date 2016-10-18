@@ -18,14 +18,14 @@ public class Book {
 	}
 	
 	public String getLastName(){
-		return name;
+		return lastName;
 	}
 
-	public void setLastName(String name){
-		this.name = name;
+	public void setLastName(String lastName){
+		this.lastName = lastName;
 	}
 	
 	public String toString(){
-		return code + " " + name;
+		return firstName + " " + lastName;
 	}
 }
