@@ -58,7 +58,7 @@ public class HenryDAO {
 		
 		try{
 			stmt = conn.createStatement();
-			String sql = "SELECT AUTHOR_NUM, AUTHOR_FIRST, AUTHOR_LAST FROM HENRY_AUTHOR WHERE AUTHOR_NUM = (SELECT AUTHOR_NUM FROM HENRY_WROTE WHERE BOOK_CODE = (SELECT BOOK_CODE FROM HENRY_BOOK WHERE TITLE IS NOT NULL))";
+			String sql = "SELECT AUTHOR_NUM, AUTHOR_FIRST, AUTHOR_LAST FROM HENRY_AUTHOR WHERE AUTHOR_NUM IN (SELECT AUTHOR_NUM FROM HENRY_WROTE)";
 			rs = stmt.executeQuery(sql);
 		
 			while(rs.next()){
@@ -145,11 +145,11 @@ public class HenryDAO {
 		
 		try{
 			stmt = conn.createStatement();
-			String sql = "SELECT PUBLISERH_CODE, PUBLISHER_NAME FROM HENRY_PUBLISHER";
+			String sql = "SELECT PUBLISHER_CODE, PUBLISHER_NAME FROM HENRY_PUBLISHER";
 			rs = stmt.executeQuery(sql);
 		
 			while(rs.next()){
-				String publisherCode = rs.getString("PUBLISHER_NAME");
+				String publisherCode = rs.getString("PUBLISHER_CODE");
 				String publisherName = rs.getString("PUBLISHER_NAME");
 				publishers.addElement(new Publisher(publisherCode, publisherName));
 			}
@@ -166,7 +166,7 @@ public class HenryDAO {
 		
 		try{
 			stmt = conn.createStatement();
-			String sql = "SELECT TITLE FROM HENRY_BOOK WHERE PUBLISHER_CODE = '" + publisherCode + "')";
+			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE PUBLISHER_CODE = '" + publisherCode + "'";
 			rs = stmt.executeQuery(sql);
 		
 			while(rs.next()){
