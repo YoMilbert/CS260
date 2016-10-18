@@ -58,7 +58,7 @@ public class HenryDAO {
 		
 		try{
 			stmt = conn.createStatement();
-			String sql = "SELECT AUTHOR_NUM, AUTHOR_FIRST, AUTHOR_LAST FROM HENRY_AUTHOR";
+			String sql = "SELECT AUTHOR_NUM, AUTHOR_FIRST, AUTHOR_LAST FROM HENRY_AUTHOR WHERE AUTHOR_NUM = (SELECT AUTHOR_NUM FROM HENRY_WROTE WHERE BOOK_CODE = (SELECT BOOK_CODE FROM HENRY_BOOK WHERE TITLE IS NOT NULL))";
 			rs = stmt.executeQuery(sql);
 		
 			while(rs.next()){
