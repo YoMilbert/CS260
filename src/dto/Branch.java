@@ -3,29 +3,30 @@ package dto;
 public class Branch {
 
 	private int onHand;
-	private String branchName;
+	private String name;
 	
-	public Branch(int onHand, String branchName){
+	public Branch(int onHand, String name){
 		this.onHand = onHand;
-		this.branchName = branchName;
+		this.name = name;
 	}
 	
 	public int getOnHand(){
 		return onHand;
 	}
+	
 	public void setOnHand(int onHand){
 		this.onHand = onHand;
 	}
 	
 	public String getBranchName(){
-		return branchName;
+		return name;
 	}
 
-	public void setBranchName(String branchName){
-		this.branchName = branchName;
+	public void setBranchName(String name){
+		this.name = name;
 	}
 	
 	public String toString(){
-		return branchName + " " + onHand;
+		return name + " " + onHand;
 	}
 }
