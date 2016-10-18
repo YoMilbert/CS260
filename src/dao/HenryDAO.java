@@ -13,6 +13,7 @@ import java.util.Vector;
 import dto.Author;
 import dto.Book;
 import dto.Branch;
+import dto.Publisher;
 
 public class HenryDAO {
 	static final String DB_URL = "jdbc:oracle:thin:@dario.cs.uwec.edu:1521:csdev";
@@ -34,7 +35,7 @@ public class HenryDAO {
 		//System.out.println(test.getPublishers());
 		//System.out.println(test.getBooksForCategory());
 		//System.out.println(test.getBooksForPublisher());
-		System.out.println(test.getBranchDataForBook());
+		//System.out.println(test.getBranchDataForBook());
 	}
 	
 	public HenryDAO(Connection conn){
@@ -98,24 +99,6 @@ public class HenryDAO {
 		return books;
 	}
 	
-	public double getPriceForBook(String bookCode){
-		double bookPrice = -1;
-		try{
-			stmt = conn.createStatement();
-			String sql = "SELECT PRICE FROM HENRY_BOOK WHERE BOOK_CODE = '" + bookCode + "'";
-			rs = stmt.executeQuery(sql);
-	
-			while(rs.next()){
-				bookPrice = rs.getDouble("PRICE");
-			}
-		} 
-			catch(SQLException sqle){
-			sqle.printStackTrace();
-		}
-	
-		return bookPrice;
-	}
-	
 	public Vector<String> getCategories(){
 		Vector<String> categories = new Vector<String>();
 		
@@ -125,8 +108,8 @@ public class HenryDAO {
 			rs = stmt.executeQuery(sql);
 		
 			while(rs.next()){
-				book_category = rs.getString("TYPE");
-				categories.addElement(book_category);
+				String bookCategory = rs.getString("TYPE");
+				categories.addElement(bookCategory);
 			}
 		} 
 			catch(SQLException sqle){
@@ -136,37 +119,18 @@ public class HenryDAO {
 		return categories;
 	}
 	
-	public Vector<String> getPublishers(){
-		Vector<String> publishers = new Vector<String>();
+	public Vector<Book> getBooksForCategory(String category){
+		Vector<Book> categoryBooks = new Vector<Book>();
 		
 		try{
 			stmt = conn.createStatement();
-			String sql = "SELECT PUBLISHER_NAME FROM HENRY_PUBLISHER";
+			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE TYPE LIKE '" + category + "'";
 			rs = stmt.executeQuery(sql);
 		
 			while(rs.next()){
-				book_publisher = rs.getString("PUBLISHER_NAME");
-				publishers.addElement(book_publisher);
-			}
-		} 
-			catch(SQLException sqle){
-			sqle.printStackTrace();
-		}
-		
-		return publishers;
-	}
-	
-	public Vector<String> getBooksForCategory(){
-		Vector<String> categoryBooks = new Vector<String>();
-		
-		try{
-			stmt = conn.createStatement();
-			String sql = "SELECT TITLE FROM HENRY_BOOK WHERE TYPE LIKE '"+book_category+"'";
-			rs = stmt.executeQuery(sql);
-		
-			while(rs.next()){
-				String book_title = rs.getString("TITLE");
-				categoryBooks.addElement(book_title);
+				String bookCode = rs.getString("BOOK_CODE");
+				String bookTitle = rs.getString("TITLE");
+				categoryBooks.addElement(new Book(bookCode, bookTitle));
 			}
 		} 
 			catch(SQLException sqle){
@@ -176,17 +140,39 @@ public class HenryDAO {
 		return categoryBooks;
 	}
 	
-	public Vector<String> getBooksForPublisher(){
-		Vector<String> publisherBooks = new Vector<String>();
+	public Vector<Publisher> getPublishers(){
+		Vector<Publisher> publishers = new Vector<Publisher>();
 		
 		try{
 			stmt = conn.createStatement();
-			String sql = "SELECT TITLE FROM HENRY_BOOK WHERE PUBLISHER_CODE IN (SELECT PUBLISHER_CODE FROM HENRY_PUBLISHER WHERE PUBLISHER_NAME = '"+book_publisher+"')";
+			String sql = "SELECT PUBLISERH_CODE, PUBLISHER_NAME FROM HENRY_PUBLISHER";
 			rs = stmt.executeQuery(sql);
 		
 			while(rs.next()){
-				String book_title = rs.getString("TITLE");
-				publisherBooks.addElement(book_title);
+				String publisherCode = rs.getString("PUBLISHER_NAME");
+				String publisherName = rs.getString("PUBLISHER_NAME");
+				publishers.addElement(new Publisher(publisherCode, publisherName));
+			}
+		} 
+			catch(SQLException sqle){
+			sqle.printStackTrace();
+		}
+		
+		return publishers;
+	}
+	
+	public Vector<Book> getBooksForPublisher(String publisherCode){
+		Vector<Book> publisherBooks = new Vector<Book>();
+		
+		try{
+			stmt = conn.createStatement();
+			String sql = "SELECT TITLE FROM HENRY_BOOK WHERE PUBLISHER_CODE = '" + publisherCode + "')";
+			rs = stmt.executeQuery(sql);
+		
+			while(rs.next()){
+				String bookCode = rs.getString("BOOK_CODE");
+				String bookTitle = rs.getString("TITLE");
+				publisherBooks.addElement(new Book(bookCode, bookTitle));
 			}
 		} 
 			catch(SQLException sqle){
@@ -196,6 +182,25 @@ public class HenryDAO {
 		return publisherBooks;
 	}
 	
+	public double getPriceForBook(String bookCode){
+		double bookPrice = -1;
+		try{
+			stmt = conn.createStatement();
+			String sql = "SELECT PRICE FROM HENRY_BOOK WHERE BOOK_CODE = '" + bookCode + "'";
+			rs = stmt.executeQuery(sql);
+	
+			while(rs.next()){
+				bookPrice = rs.getDouble("PRICE");
+				System.out.println(bookPrice);
+			}
+		} 
+			catch(SQLException sqle){
+			sqle.printStackTrace();
+		}
+	
+		return bookPrice;
+	}
+	
 	public Vector<Branch> getBranchDataForBook(String bookCode){
 		Vector<Branch> branch = new Vector<Branch>();
 		
@@ -203,13 +208,13 @@ public class HenryDAO {
 			stmt = conn.createStatement();
 			String sql = "SELECT BRANCH_NAME, ON_HAND FROM HENRY_INVENTORY INNER " +
 						 "JOIN HENRY_BRANCH ON HENRY_INVENTORY.BRANCH_NUM = HENRY_BRANCH.BRANCH_NUM" + 
-						 " WHERE HENRY_INVENTORY.BOOK_CODE = '" + bookCode + "')";
+						 " WHERE HENRY_INVENTORY.BOOK_CODE = '" + bookCode + "'";
 			rs = stmt.executeQuery(sql);
 		
 			while(rs.next()){
 				String name = rs.getString("BRANCH_NAME");
 				int quant = rs.getInt("ON_HAND");
-				branch.addElement(new Branch(name, quant));
+				branch.addElement(new Branch(quant, name));
 			}
 		} 
 			catch(SQLException sqle){

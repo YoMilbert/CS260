@@ -2,19 +2,19 @@ package dto;
 
 public class Publisher {
 
-	private int code;
+	private String code;
 	private String name;
 		
-	public Publisher(int code, String name){
+	public Publisher(String code, String name){
 		this.code = code;
 		this.name = name;
 	}
 		
-	public int getNumber(){
+	public String getCode(){
 		return code;
 	}
 		
-	public void setNumber(int code){
+	public void setCode(String code){
 		this.code = code;
 	}
 	

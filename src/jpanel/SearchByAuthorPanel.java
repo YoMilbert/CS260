@@ -53,12 +53,17 @@ public class SearchByAuthorPanel extends JPanel{
 				public void actionPerformed(ActionEvent e){
 					JComboBox<Book> books = (JComboBox<Book>) e.getSource();
 					Book book = (Book) books.getSelectedItem();
+					System.out.println(book.getCode());
 					refillPrice(book.getCode());
 					refillBranchData(book.getCode());
 				}
 			});
 		this.add(authors);
 		this.add(books);
+		price = new JTextArea();
+		this.add(price);
+		branchData = new JList();
+		this.add(branchData);
 	}
 	
 	/*
@@ -76,7 +81,7 @@ public class SearchByAuthorPanel extends JPanel{
 	 */
 	public void refillPrice(String bookCode){
 		double cost = henryDAO.getPriceForBook(bookCode);
-		price.setText(cost);
+		price.setText("$" + cost);
 	}
 	
 	/*
