@@ -2,31 +2,32 @@ package dto;
 
 public class Publisher {
 
-		private int publisher_Code;
-		private String publisher_Name;
+	private int code;
+	private String name;
 		
-		public Publisher(int publisher_Code, String publisher_Name){
-			this.publisher_Code = publisher_Code;
-			this.publisher_Name = publisher_Name;
-		}
+	public Publisher(int code, String name){
+		this.code = code;
+		this.name = name;
+	}
 		
-		public int getNumber(){
-			return publisher_Code;
-		}
-		public void setNumber(int publisher_Code){
-			this.publisher_Code = publisher_Code;
-		}
+	public int getNumber(){
+		return code;
+	}
 		
-		public String getFirstName(){
-			return publisher_Name;
-		}
+	public void setNumber(int code){
+		this.code = code;
+	}
+	
+	public String getFirstName(){
+		return name;
+	}
 
-		public void setFirstName(String publisher_Name){
-			this.publisher_Name = publisher_Name;
-		}
+	public void setFirstName(String name){
+		this.name = name;
+	}
 		
-		public String toString(){
-			return publisher_Name + " " + publisher_Code;
-		}
+	public String toString(){
+		return name + " " + code;
+	}
 		
 }
