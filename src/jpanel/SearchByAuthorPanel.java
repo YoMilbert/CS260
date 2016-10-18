@@ -16,6 +16,8 @@ import javax.swing.JTextArea;
 
 import dao.HenryDAO;
 import dto.Author;
+import dto.Book;
+import dto.Branch;
 
 public class SearchByAuthorPanel extends JPanel{
 	
@@ -24,9 +26,9 @@ public class SearchByAuthorPanel extends JPanel{
 	HenryDAO henryDAO;
 	
 	JComboBox<Author> authors;
-	JComboBox<String> books;
+	JComboBox<Book> books;
 	JTextArea price;
-	JList<String> branchData;
+	JList<Branch> branchData;
 	
 	public SearchByAuthorPanel(Connection conn){
 		henryDAO = new HenryDAO(conn);
@@ -45,14 +47,14 @@ public class SearchByAuthorPanel extends JPanel{
 					refillBooks(authorNum);
 				}
 			});
-		books = new JComboBox<String>();
+		books = new JComboBox<Book>();
 		books.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					JComboBox<String> books = (JComboBox<String>) e.getSource();
-					String book = (String) books.getSelectedItem();
-					refillPrice(book);
-					refillBranchData(book);
+					JComboBox<Book> books = (JComboBox<Book>) e.getSource();
+					Book book = (Book) books.getSelectedItem();
+					refillPrice(book.getCode());
+					refillBranchData(book.getCode());
 				}
 			});
 		this.add(authors);
@@ -63,25 +65,25 @@ public class SearchByAuthorPanel extends JPanel{
 	 * Resets the books JComboBox to show books for the selected author.
 	 */
 	public void refillBooks(int authorNum){
-		Hashtable<String, String> bookNames = henryDAO.getBooksForAuthor(authorNum);
-		//DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(bookNames);
-		//books.setModel(model);
-		books = new JComboBox(bookNames.)
+		Vector<Book> bookItems = henryDAO.getBooksForAuthor(authorNum);
+		DefaultComboBoxModel<Book> model = new DefaultComboBoxModel<Book>(bookItems);
+		books.setModel(model);
+		//books = new JComboBox(bookItems);
 	}
 	
 	/*
 	 * Resets the price JTextArea to show the cost of the selected book.
 	 */
-	public void refillPrice(String book){
-		String cost = henryDAO.getPriceForBook();
+	public void refillPrice(String bookCode){
+		String cost = henryDAO.getPriceForBook(bookCode);
 		price.setText(cost);
 	}
 	
 	/*
 	 * Resets branchData to show the attributes of the selected book.
 	 */
-	public void refillBranchData(String book){
-		Vector<String> data = henryDAO.getBranchDataForBook(book);
+	public void refillBranchData(String bookCode){
+		Vector<Branch> data = henryDAO.getBranchDataForBook(bookCode);
 		branchData.setListData(data);
 	}
 }

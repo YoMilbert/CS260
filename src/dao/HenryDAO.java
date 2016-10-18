@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import dto.Author;
+import dto.Book;
 
 public class HenryDAO {
 	static final String DB_URL = "jdbc:oracle:thin:@dario.cs.uwec.edu:1521:csdev";
@@ -18,18 +19,6 @@ public class HenryDAO {
 	static final String USER = "HUPFAUSM2796";
 	static final String PASS = "PDDDXEUM";
 	
-	String book_price;
-	
-	String book_title = "Beloved";
-	
-	String book_category = "FIC";
-	String book_publisher = "Plume";
-	
-	String book_location;
-	String location_name;
-	String book_quant;
-	
-	String authorName;
 	static Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
@@ -85,8 +74,8 @@ public class HenryDAO {
 		
 	}
 	
-	public Hashtable<String, String> getBooksForAuthor(int authorNum){
-		Hashtable<String, String> books = new Hashtable<String, String>();
+	public Vector<Book> getBooksForAuthor(int authorNum){
+		Vector<Book> books = new Vector<Book>();
 		
 		try{
 			stmt = conn.createStatement();
@@ -96,9 +85,9 @@ public class HenryDAO {
 			rs = stmt.executeQuery(sql);
 		
 			while(rs.next()){
-				String book_code = rs.getString("BOOK_CODE");
-				String book_title = rs.getString("TITLE");
-				books.put(book_code, book_title);
+				String bookCode = rs.getString("BOOK_CODE");
+				String bookTitle = rs.getString("TITLE");
+				books.addElement(new Book(bookCode, bookTitle));
 			}
 		} 
 			catch(SQLException sqle){
@@ -108,15 +97,15 @@ public class HenryDAO {
 		return books;
 	}
 	
-	public String getPriceForBook(){
-	
+	public int getPriceForBook(String bookCode){
+		int bookPrice = -1;
 		try{
 			stmt = conn.createStatement();
-			String sql = "SELECT PRICE FROM HENRY_BOOK WHERE TITLE = '"+book_title+"'";
+			String sql = "SELECT PRICE FROM HENRY_BOOK WHERE BOOK_CODE = '" + bookCode + "'";
 			rs = stmt.executeQuery(sql);
 	
 			while(rs.next()){
-				String book_price = rs.getString("PRICE");
+				bookPrice = rs.getInt("PRICE");
 			
 			}
 		} 
@@ -124,7 +113,7 @@ public class HenryDAO {
 			sqle.printStackTrace();
 		}
 	
-		return book_price;
+		return bookPrice;
 	}
 	
 	public Vector<String> getCategories(){
