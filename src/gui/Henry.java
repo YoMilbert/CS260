@@ -35,11 +35,11 @@ public class Henry {
 		//Add panels with connection
 		Connection conn = HenryDAO.createConnection();
 		JComponent authorPanel = new SearchByAuthorPanel(conn);
-		//JComponent categoryPanel = new SearchByPublisherPanel();
-		//JComponent publisherPanel = new SearchByCategoryPanel(conn);
+		JComponent categoryPanel = new SearchByCategoryPanel(conn);
+		JComponent publisherPanel = new SearchByPublisherPanel(conn);
 		tabbedPane.addTab("Search By Author", authorPanel);
-		//tabbedPane.addTab("Search By Category", categoryPanel);
-		//tabbedPane.addTab("Search By Publisher", publisherPanel);
+		tabbedPane.addTab("Search By Category", categoryPanel);
+		tabbedPane.addTab("Search By Publisher", publisherPanel);
 		
 		//Add tabbedPane to frame and display
 		frame.add(tabbedPane);

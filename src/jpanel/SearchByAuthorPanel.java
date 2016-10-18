@@ -5,7 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -73,7 +72,6 @@ public class SearchByAuthorPanel extends JPanel{
 		Vector<Book> bookItems = henryDAO.getBooksForAuthor(authorNum);
 		DefaultComboBoxModel<Book> model = new DefaultComboBoxModel<Book>(bookItems);
 		books.setModel(model);
-		//books = new JComboBox(bookItems);
 	}
 	
 	/*
