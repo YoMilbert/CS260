@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -14,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import dao.HenryDAO;
+import dto.Author;
 
 public class SearchByAuthorPanel extends JPanel{
 	
@@ -21,7 +23,7 @@ public class SearchByAuthorPanel extends JPanel{
 
 	HenryDAO henryDAO;
 	
-	JComboBox<String> authors;
+	JComboBox<Author> authors;
 	JComboBox<String> books;
 	JTextArea price;
 	JList<String> branchData;
@@ -32,17 +34,18 @@ public class SearchByAuthorPanel extends JPanel{
 		this.setLayout(new FlowLayout());
 		this.setPreferredSize(new Dimension(500, 500));
 		//Add authors
-		Vector<String> authorNames = henryDAO.getAuthorNames();
-		authors = new JComboBox<String>(authorNames);
+		Vector<Author> authorItems = henryDAO.getAuthors();
+		authors = new JComboBox<Author>(authorItems);
 		authors.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					JComboBox<String> authors = (JComboBox<String>) e.getSource();
-					String author = (String) authors.getSelectedItem();
-					refillBooks(author);
+					JComboBox<Author> authors = (JComboBox<Author>) e.getSource();
+					Author author = (Author) authors.getSelectedItem();
+					int authorNum = author.getNumber();
+					refillBooks(authorNum);
 				}
 			});
-		books = new JComboBox<String>(authorNames);
+		books = new JComboBox<String>();
 		books.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
@@ -59,16 +62,17 @@ public class SearchByAuthorPanel extends JPanel{
 	/*
 	 * Resets the books JComboBox to show books for the selected author.
 	 */
-	public void refillBooks(String authorName){
-		Vector<String> bookNames = henryDAO.getBooksForAuthor();
-		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(bookNames);
-		books.setModel(model);
+	public void refillBooks(int authorNum){
+		Hashtable<String, String> bookNames = henryDAO.getBooksForAuthor(authorNum);
+		//DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(bookNames);
+		//books.setModel(model);
+		books = new JComboBox(bookNames.)
 	}
 	
 	/*
 	 * Resets the price JTextArea to show the cost of the selected book.
 	 */
-	public void refillPrice(String authorName){
+	public void refillPrice(String book){
 		String cost = henryDAO.getPriceForBook();
 		price.setText(cost);
 	}
@@ -76,8 +80,8 @@ public class SearchByAuthorPanel extends JPanel{
 	/*
 	 * Resets branchData to show the attributes of the selected book.
 	 */
-	public void refillBranchData(String authorName){
-		Vector<String> data = henryDAO.getBranchDataForBook();
+	public void refillBranchData(String book){
+		Vector<String> data = henryDAO.getBranchDataForBook(book);
 		branchData.setListData(data);
 	}
 }
