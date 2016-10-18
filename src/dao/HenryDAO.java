@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import dto.Author;
 import dto.Book;
+import dto.Branch;
 
 public class HenryDAO {
 	static final String DB_URL = "jdbc:oracle:thin:@dario.cs.uwec.edu:1521:csdev";
@@ -97,16 +98,15 @@ public class HenryDAO {
 		return books;
 	}
 	
-	public int getPriceForBook(String bookCode){
-		int bookPrice = -1;
+	public double getPriceForBook(String bookCode){
+		double bookPrice = -1;
 		try{
 			stmt = conn.createStatement();
 			String sql = "SELECT PRICE FROM HENRY_BOOK WHERE BOOK_CODE = '" + bookCode + "'";
 			rs = stmt.executeQuery(sql);
 	
 			while(rs.next()){
-				bookPrice = rs.getInt("PRICE");
-			
+				bookPrice = rs.getDouble("PRICE");
 			}
 		} 
 			catch(SQLException sqle){
@@ -196,19 +196,20 @@ public class HenryDAO {
 		return publisherBooks;
 	}
 	
-	public Hashtable<String, Integer> getBranchDataForBook(){
-		Hashtable<String, Integer> branch = new Hashtable<String, Integer>();
+	public Vector<Branch> getBranchDataForBook(String bookCode){
+		Vector<Branch> branch = new Vector<Branch>();
 		
 		try{
 			stmt = conn.createStatement();
-			String sql = "SELECT BRANCH_NAME, ON_HAND FROM HENRY_INVENTORY INNER JOIN HENRY_BRANCH ON HENRY_INVENTORY.BRANCH_NUM = HENRY_BRANCH.BRANCH_NUM WHERE HENRY_INVENTORY.BOOK_CODE = (SELECT BOOK_CODE FROM HENRY_BOOK WHERE TITLE = '"+book_title+"')";
+			String sql = "SELECT BRANCH_NAME, ON_HAND FROM HENRY_INVENTORY INNER " +
+						 "JOIN HENRY_BRANCH ON HENRY_INVENTORY.BRANCH_NUM = HENRY_BRANCH.BRANCH_NUM" + 
+						 " WHERE HENRY_INVENTORY.BOOK_CODE = '" + bookCode + "')";
 			rs = stmt.executeQuery(sql);
 		
 			while(rs.next()){
-				//book_location = rs.getString("BRANCH_LOCATION");
 				String name = rs.getString("BRANCH_NAME");
 				int quant = rs.getInt("ON_HAND");
-				branch.put(name, quant);
+				branch.addElement(new Branch(name, quant));
 			}
 		} 
 			catch(SQLException sqle){

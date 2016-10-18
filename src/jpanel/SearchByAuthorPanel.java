@@ -75,7 +75,7 @@ public class SearchByAuthorPanel extends JPanel{
 	 * Resets the price JTextArea to show the cost of the selected book.
 	 */
 	public void refillPrice(String bookCode){
-		String cost = henryDAO.getPriceForBook(bookCode);
+		double cost = henryDAO.getPriceForBook(bookCode);
 		price.setText(cost);
 	}
 	
