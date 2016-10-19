@@ -29,7 +29,6 @@ public class Henry {
 		//Create frame
 		JFrame frame = new JFrame("CS260 Assignment 1");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		//Create tabbed Pane
 		JTabbedPane tabbedPane = new JTabbedPane();
 		//Add panels with connection
@@ -40,7 +39,6 @@ public class Henry {
 		tabbedPane.addTab("Search By Author", authorPanel);
 		tabbedPane.addTab("Search By Category", categoryPanel);
 		tabbedPane.addTab("Search By Publisher", publisherPanel);
-		
 		//Add tabbedPane to frame and display
 		frame.add(tabbedPane);
 		frame.pack();

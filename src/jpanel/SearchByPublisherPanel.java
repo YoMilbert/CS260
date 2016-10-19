@@ -34,7 +34,7 @@ public class SearchByPublisherPanel extends JPanel{
 		henryDAO = new HenryDAO(conn);
 		
 		this.setLayout(new FlowLayout());
-		this.setPreferredSize(new Dimension(500, 500));
+		this.setPreferredSize(new Dimension(400, 200));
 		//Add authors
 		Vector<Publisher> publishersList = henryDAO.getPublishers();
 		publishers = new JComboBox<Publisher>(publishersList);
@@ -46,6 +46,8 @@ public class SearchByPublisherPanel extends JPanel{
 					refillBooks(publisher.getCode());
 				}
 			});
+		this.add(publishers);
+		//Setup other data holders
 		books = new JComboBox<Book>();
 		books.addActionListener(
 			new ActionListener(){
@@ -57,12 +59,16 @@ public class SearchByPublisherPanel extends JPanel{
 					refillBranchData(book.getCode());
 				}
 			});
-		this.add(publishers);
 		this.add(books);
 		price = new JTextArea();
 		this.add(price);
 		branchData = new JList();
 		this.add(branchData);
+		//Initialize the remaining data
+		refillBooks(publishersList.get(0).getCode());
+		Book book = (Book) books.getSelectedItem();
+		refillPrice(book.getCode());
+		refillBranchData(book.getCode());
 	}
 	
 	/*
@@ -72,6 +78,10 @@ public class SearchByPublisherPanel extends JPanel{
 		Vector<Book> bookItems = henryDAO.getBooksForPublisher(publisherCode);
 		DefaultComboBoxModel<Book> model = new DefaultComboBoxModel<Book>(bookItems);
 		books.setModel(model);
+		
+		String bookCode = bookItems.get(0).getCode();
+		refillPrice(bookCode);
+		refillBranchData(bookCode);
 	}
 	
 	/*
