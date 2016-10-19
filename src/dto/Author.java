@@ -36,6 +36,6 @@ public class Author {
 	}
 	
 	public String toString(){
-		return firstName + " " + lastName;
+		return firstName.trim() + " " + lastName.trim();
 	}
 }

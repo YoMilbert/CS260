@@ -27,7 +27,7 @@ public class Henry {
 	
 	private static void runGUI(){
 		//Create frame
-		JFrame frame = new JFrame("CS260 Assignment 1");
+		JFrame frame = new JFrame("CS260 Assignment 1 - Henry's Books");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//Create tabbed Pane
 		JTabbedPane tabbedPane = new JTabbedPane();

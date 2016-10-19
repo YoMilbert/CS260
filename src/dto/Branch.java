@@ -27,6 +27,6 @@ public class Branch {
 	}
 	
 	public String toString(){
-		return name + " " + onHand;
+		return name.trim() + " - " + onHand;
 	}
 }

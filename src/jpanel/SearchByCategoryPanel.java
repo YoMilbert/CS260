@@ -1,7 +1,11 @@
 package jpanel;
 
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -31,8 +35,9 @@ public class SearchByCategoryPanel extends JPanel{
 	public SearchByCategoryPanel(Connection conn){
 		henryDAO = new HenryDAO(conn);
 		
-		this.setLayout(new FlowLayout());
-		this.setPreferredSize(new Dimension(400, 200));
+		this.setLayout(new GridBagLayout());
+		this.setPreferredSize(new Dimension(400, 300));
+		this.setBackground(Color.WHITE);
 		//Add categories
 		Vector<String> categoriesList = henryDAO.getCategories();
 		categories = new JComboBox<String>(categoriesList);
@@ -44,24 +49,54 @@ public class SearchByCategoryPanel extends JPanel{
 					refillBooks(category);
 				}
 			});
-		this.add(categories);
-		//Setup other data holders
+		JTextArea categoriesText = new JTextArea("Category");
+		categoriesText.setFont(new Font("Arial", 1, 13));
+		//Setup remaining items
 		books = new JComboBox<Book>();
 		books.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					JComboBox<Book> books = (JComboBox<Book>) e.getSource();
 					Book book = (Book) books.getSelectedItem();
-					System.out.println(book.getCode());
 					refillPrice(book.getCode());
 					refillBranchData(book.getCode());
 				}
 			});
-		this.add(books);
+		JTextArea bookText = new JTextArea("Book");
+		bookText.setFont(new Font("Arial", 1, 13));
 		price = new JTextArea();
-		this.add(price);
+		price.setFont(new Font("Arial", 1, 12));
+		JTextArea priceText = new JTextArea("Price");
+		priceText.setFont(new Font("Arial", 1, 13));
 		branchData = new JList();
-		this.add(branchData);
+		JTextArea branchDataText = new JTextArea("Quantity");
+		branchDataText.setFont(new Font("Arial", 1, 13));
+		//Add all items
+		Insets insets = new Insets(5, 6, 5, 6);
+		GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 0, 0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, insets, 0, 0);
+		this.add(categoriesText, c);
+		c = new GridBagConstraints(1, 0, 1, 1, 0, 0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, insets, 0, 0);
+		this.add(categories, c);
+		c = new GridBagConstraints(0, 1, 1, 1, 0, 0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, insets, 0, 0);
+		this.add(bookText, c);
+		c = new GridBagConstraints(1, 1, 1, 1, 0, 0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, insets, 0, 0);
+		this.add(books, c);
+		c = new GridBagConstraints(0, 2, 1, 1, 0, 0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, insets, 0, 0);
+		this.add(priceText, c);
+		c = new GridBagConstraints(1, 2, 1, 1, 0, 0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, insets, 0, 0);
+		this.add(price, c);
+		c = new GridBagConstraints(0, 3, 1, 1, 0, 0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, insets, 0, 0);
+		this.add(branchDataText, c);
+		c = new GridBagConstraints(1, 3, 1, 1, 0, 0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, insets, 0, 0);
+		this.add(branchData, c);
 		//Initialize the remaining data
 		refillBooks(categoriesList.get(0));
 		Book book = (Book) books.getSelectedItem();

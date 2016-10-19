@@ -39,7 +39,9 @@ public class HenryDAO {
 		
 		try{
 			Statement stmt = conn.createStatement();
-			String sql = "SELECT AUTHOR_NUM, AUTHOR_FIRST, AUTHOR_LAST FROM HENRY_AUTHOR WHERE AUTHOR_NUM IN (SELECT AUTHOR_NUM FROM HENRY_WROTE)";
+			String sql = "SELECT AUTHOR_NUM, AUTHOR_FIRST, AUTHOR_LAST FROM HENRY_AUTHOR " + 
+						 "WHERE AUTHOR_NUM IN (SELECT AUTHOR_NUM FROM HENRY_WROTE)" + 
+						 " ORDER BY AUTHOR_LAST";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()){
 				int num = rs.getInt("AUTHOR_NUM");
@@ -59,8 +61,8 @@ public class HenryDAO {
 		try{
 			Statement stmt = conn.createStatement();
 			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE BOOK_CODE IN (SELECT " +
-						 "BOOK_CODE FROM HENRY_WROTE WHERE AUTHOR_NUM LIKE (SELECT" +
-						 " AUTHOR_NUM FROM HENRY_AUTHOR WHERE AUTHOR_NUM = '" + authorNum + "'))";
+						 "BOOK_CODE FROM HENRY_WROTE WHERE AUTHOR_NUM LIKE '" + authorNum + "')" +
+						 " ORDER BY TITLE";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()){
 				String bookCode = rs.getString("BOOK_CODE");
@@ -78,7 +80,7 @@ public class HenryDAO {
 		Vector<String> categories = new Vector<String>();
 		try{
 			Statement stmt = conn.createStatement();
-			String sql = "SELECT DISTINCT TYPE FROM HENRY_BOOK";
+			String sql = "SELECT DISTINCT TYPE FROM HENRY_BOOK ORDER BY TYPE";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()){
 				String bookCategory = rs.getString("TYPE");
@@ -95,7 +97,8 @@ public class HenryDAO {
 		Vector<Book> categoryBooks = new Vector<Book>();
 		try{
 			Statement stmt = conn.createStatement();
-			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE TYPE LIKE '" + category + "'";
+			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE TYPE LIKE '" + 
+						 category + "' ORDER BY TITLE";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()){
 				String bookCode = rs.getString("BOOK_CODE");
@@ -132,7 +135,8 @@ public class HenryDAO {
 		Vector<Book> publisherBooks = new Vector<Book>();
 		try{
 			Statement stmt = conn.createStatement();
-			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE PUBLISHER_CODE = '" + publisherCode + "'";
+			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE PUBLISHER_CODE = '" + 
+						 publisherCode + "' ORDER BY TITLE";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()){
 				String bookCode = rs.getString("BOOK_CODE");
@@ -168,7 +172,8 @@ public class HenryDAO {
 			Statement stmt = conn.createStatement();
 			String sql = "SELECT BRANCH_NAME, ON_HAND FROM HENRY_INVENTORY INNER " +
 						 "JOIN HENRY_BRANCH ON HENRY_INVENTORY.BRANCH_NUM = HENRY_BRANCH.BRANCH_NUM" + 
-						 " WHERE HENRY_INVENTORY.BOOK_CODE = '" + bookCode + "'";
+						 " WHERE HENRY_INVENTORY.BOOK_CODE = '" + bookCode + "'" +
+						 " ORDER BY ON_HAND DESC";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()){
 				String name = rs.getString("BRANCH_NAME");
