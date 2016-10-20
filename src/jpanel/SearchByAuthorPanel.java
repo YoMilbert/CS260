@@ -70,7 +70,7 @@ public class SearchByAuthorPanel extends JPanel{
 		price.setFont(new Font("Arial", 1, 12));
 		JTextArea priceText = new JTextArea("Price");
 		priceText.setFont(new Font("Arial", 1, 13));
-		branchData = new JList();
+		branchData = new JList<Branch>();
 		JTextArea branchDataText = new JTextArea("Quantity");
 		branchDataText.setFont(new Font("Arial", 1, 13));
 		//Add all items
