@@ -13,6 +13,10 @@ import dto.Book;
 import dto.Branch;
 import dto.Publisher;
 
+/*
+ * Queries the dario database for information. Method names are fairly
+ * self-explanatory.
+ */
 public class HenryDAO {
 	static final String DB_URL = "jdbc:oracle:thin:@dario.cs.uwec.edu:1521:csdev";
 	static final String USER = "HUPFAUSM2796";

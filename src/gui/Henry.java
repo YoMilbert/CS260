@@ -43,6 +43,7 @@ public class Henry {
 		frame.add(tabbedPane);
 		frame.pack();
 		frame.setVisible(true);
+		//Close the connection with the window is closed
 		frame.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
 				try {
