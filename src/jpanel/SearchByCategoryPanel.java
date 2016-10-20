@@ -122,7 +122,8 @@ public class SearchByCategoryPanel extends JPanel{
 	 */
 	public void refillPrice(String bookCode){
 		double cost = henryDAO.getPriceForBook(bookCode);
-		price.setText("$" + cost);
+		String costFormatted = String.format("%.2f", cost);
+		price.setText("$" + costFormatted);
 	}
 	
 	/*

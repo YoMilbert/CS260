@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -38,11 +39,11 @@ public class HenryDAO {
 		Vector<Author> names = new Vector<Author>();
 		
 		try{
-			Statement stmt = conn.createStatement();
 			String sql = "SELECT AUTHOR_NUM, AUTHOR_FIRST, AUTHOR_LAST FROM HENRY_AUTHOR " + 
 						 "WHERE AUTHOR_NUM IN (SELECT AUTHOR_NUM FROM HENRY_WROTE)" + 
 						 " ORDER BY AUTHOR_LAST";
-			ResultSet rs = stmt.executeQuery(sql);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				int num = rs.getInt("AUTHOR_NUM");
 				String first = rs.getString("AUTHOR_FIRST");
@@ -59,11 +60,12 @@ public class HenryDAO {
 	public Vector<Book> getBooksForAuthor(int authorNum){
 		Vector<Book> books = new Vector<Book>();
 		try{
-			Statement stmt = conn.createStatement();
 			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE BOOK_CODE IN (SELECT " +
-						 "BOOK_CODE FROM HENRY_WROTE WHERE AUTHOR_NUM LIKE '" + authorNum + "')" +
+						 "BOOK_CODE FROM HENRY_WROTE WHERE AUTHOR_NUM = ?)" +
 						 " ORDER BY TITLE";
-			ResultSet rs = stmt.executeQuery(sql);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, authorNum);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				String bookCode = rs.getString("BOOK_CODE");
 				String bookTitle = rs.getString("TITLE");
@@ -79,9 +81,9 @@ public class HenryDAO {
 	public Vector<String> getCategories(){
 		Vector<String> categories = new Vector<String>();
 		try{
-			Statement stmt = conn.createStatement();
 			String sql = "SELECT DISTINCT TYPE FROM HENRY_BOOK ORDER BY TYPE";
-			ResultSet rs = stmt.executeQuery(sql);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				String bookCategory = rs.getString("TYPE");
 				categories.addElement(bookCategory);
@@ -96,10 +98,11 @@ public class HenryDAO {
 	public Vector<Book> getBooksForCategory(String category){
 		Vector<Book> categoryBooks = new Vector<Book>();
 		try{
-			Statement stmt = conn.createStatement();
-			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE TYPE LIKE '" + 
-						 category + "' ORDER BY TITLE";
-			ResultSet rs = stmt.executeQuery(sql);
+			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE TYPE LIKE ?" + 
+						 " ORDER BY TITLE";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, category);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				String bookCode = rs.getString("BOOK_CODE");
 				String bookTitle = rs.getString("TITLE");
@@ -115,10 +118,10 @@ public class HenryDAO {
 	public Vector<Publisher> getPublishers(){
 		Vector<Publisher> publishers = new Vector<Publisher>();
 		try{
-			Statement stmt = conn.createStatement();
 			String sql = "SELECT PUBLISHER_CODE, PUBLISHER_NAME FROM HENRY_PUBLISHER " + 
 						 "WHERE PUBLISHER_CODE IN (SELECT PUBLISHER_CODE FROM HENRY_BOOK)";
-			ResultSet rs = stmt.executeQuery(sql);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				String publisherCode = rs.getString("PUBLISHER_CODE");
 				String publisherName = rs.getString("PUBLISHER_NAME");
@@ -134,10 +137,11 @@ public class HenryDAO {
 	public Vector<Book> getBooksForPublisher(String publisherCode){
 		Vector<Book> publisherBooks = new Vector<Book>();
 		try{
-			Statement stmt = conn.createStatement();
-			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE PUBLISHER_CODE = '" + 
-						 publisherCode + "' ORDER BY TITLE";
-			ResultSet rs = stmt.executeQuery(sql);
+			String sql = "SELECT BOOK_CODE, TITLE FROM HENRY_BOOK WHERE PUBLISHER_CODE = ?"+
+			" ORDER BY TITLE";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, publisherCode);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				String bookCode = rs.getString("BOOK_CODE");
 				String bookTitle = rs.getString("TITLE");
@@ -153,9 +157,10 @@ public class HenryDAO {
 	public double getPriceForBook(String bookCode){
 		double bookPrice = -1;
 		try{
-			Statement stmt = conn.createStatement();
-			String sql = "SELECT PRICE FROM HENRY_BOOK WHERE BOOK_CODE = '" + bookCode + "'";
-			ResultSet rs = stmt.executeQuery(sql);
+			String sql = "SELECT PRICE FROM HENRY_BOOK WHERE BOOK_CODE = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, bookCode);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				bookPrice = rs.getDouble("PRICE");
 			}
@@ -169,12 +174,13 @@ public class HenryDAO {
 	public Vector<Branch> getBranchDataForBook(String bookCode){
 		Vector<Branch> branch = new Vector<Branch>();
 		try{
-			Statement stmt = conn.createStatement();
 			String sql = "SELECT BRANCH_NAME, ON_HAND FROM HENRY_INVENTORY INNER " +
 						 "JOIN HENRY_BRANCH ON HENRY_INVENTORY.BRANCH_NUM = HENRY_BRANCH.BRANCH_NUM" + 
-						 " WHERE HENRY_INVENTORY.BOOK_CODE = '" + bookCode + "'" +
+						 " WHERE HENRY_INVENTORY.BOOK_CODE = ?" +
 						 " ORDER BY ON_HAND DESC";
-			ResultSet rs = stmt.executeQuery(sql);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, bookCode);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				String name = rs.getString("BRANCH_NAME");
 				int quant = rs.getInt("ON_HAND");
