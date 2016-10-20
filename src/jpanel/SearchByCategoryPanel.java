@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import dao.HenryDAO;
+import dto.Author;
 import dto.Book;
 import dto.Branch;
 
@@ -41,6 +42,7 @@ public class SearchByCategoryPanel extends JPanel{
 		//Add categories
 		Vector<String> categoriesList = henryDAO.getCategories();
 		categories = new JComboBox<String>(categoriesList);
+		categories.setPrototypeDisplayValue(new String(" XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"));
 		categories.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
@@ -53,6 +55,7 @@ public class SearchByCategoryPanel extends JPanel{
 		categoriesText.setFont(new Font("Arial", 1, 13));
 		//Setup remaining items
 		books = new JComboBox<Book>();
+		books.setPrototypeDisplayValue(new Book("", " XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"));
 		books.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
@@ -69,6 +72,7 @@ public class SearchByCategoryPanel extends JPanel{
 		JTextArea priceText = new JTextArea("Price");
 		priceText.setFont(new Font("Arial", 1, 13));
 		branchData = new JList<Branch>();
+		branchData.setPrototypeCellValue(new Branch(1, " XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"));
 		JTextArea branchDataText = new JTextArea("Quantity");
 		branchDataText.setFont(new Font("Arial", 1, 13));
 		//Add all items
